@@ -25,8 +25,14 @@ matrix:
     - php: nightly
 
 before_script:
+    - phpenv config-rm xdebug.ini
+
+    # Add composer's global bin directory to the path
+    # see: https://github.com/drush-ops/drush#install---composer
+    - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
     - composer self-update
-    - composer install --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
+    - composer global require pdepend/pdepend phpmd/phpmd sebastian/phpcpd phploc/phploc squizlabs/php_codesniffer mayflower/php-codebrowser phpunit/phpunit behat/behat phpstan/phpstan phing/phing
+    - composer install --no-dev --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
 
 script:
-    - ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; bin/phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'
+    - ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; phpdbg -qrr phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'
