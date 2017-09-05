@@ -1,6 +1,6 @@
 sudo: false
 dist: trusty
-language: php:
+language: php
   - '7.0'
   - '7.1'
   - nightlyi
