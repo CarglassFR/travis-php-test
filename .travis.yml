@@ -1,30 +1,32 @@
 sudo: false
 dist: trusty
 language: php
-  - '7.0'
-  - '7.1'
-  - nightlyi
+
+php:
+    - '7.0'
+    - '7.1'
+    - nightly
 
 git:
-  depth: 5
+    depth: 5
 
 cache:
-  directories:
+    directories:
     - $HOME/.composer/cache
 
- addons:
-  apt:
-    packages:
-      - parallel
+addons:
+    apt:
+        packages:
+        - parallel
 
 matrix:
-  fast_finish: true
-  allow_failures:
+    fast_finish: true
+    allow_failures:
     - php: nightly
 
 before_script:
-  - composer self-update
-  - composer install --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
+    - composer self-update
+    - composer install --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
 
-scripts:
-  - ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; bin/phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'
+script:
+    - ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; bin/phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'
