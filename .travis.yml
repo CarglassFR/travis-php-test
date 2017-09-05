@@ -20,13 +20,17 @@ addons:
         - parallel
 
 matrix:
+    include:
+    - php: 7.0
+      env: deps=low
     fast_finish: true
     allow_failures:
     - php: nightly
 
 before_script:
     - composer self-update
-    - composer install --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
+    - if [ "$deps" == "low" ]; then composer update --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader; fi
+    - if [ "$deps" != "low" ]; then composer install --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader; fi
 
 script:
     - ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; bin/phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'
