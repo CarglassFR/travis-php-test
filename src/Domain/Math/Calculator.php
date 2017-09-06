@@ -6,6 +6,10 @@ namespace Domain\Math;
 
 final class Calculator {
 	public function add($number1, $number2): int {
+		// check dead code
+		if(false) {
+			return 1;
+		}
 		return $number1 + $number2;
 	}
 
