@@ -50,11 +50,11 @@ install:
             set -e
 
             tfold a.1 \
-            "HELLO !"
+            "echo 'HELLO !'"
             tfold a.2 \
             "ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; phpdbg -qrr phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'"
             tfold a.3i \
-            "BYE !!!"
+            "echo 'BYE !!!'"
         }
         export -f run_tests
 
