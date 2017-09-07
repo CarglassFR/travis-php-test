@@ -19,6 +19,7 @@ fi
 #    GH_SONARQ_PARAMS="-Dsonar.host.url=$SQ_URL -Dsonar.jdbc.url=$SQ_JDBC_URL -Dsonar.jdbc.driverClassName=org.postgresql.Driver -Dsonar.jdbc.user=$SQ_JDBC_USER -Dsonar.jdbc.password=$SQ_JDBC_PASSWORD"
 #fi
 
-if [ ${GH_SONARQ_PARAMS} != "" ]; then
+if [ "${GH_SONARQ_PARAMS}" != "" ]; then
+    echo "Executing SonarQube"
     sonar-scanner-3.0.3.778-linux/bin/sonar-scanner ${GH_SONARQ_PARAMS}
 fi
