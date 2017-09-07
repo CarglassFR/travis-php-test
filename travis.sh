@@ -19,5 +19,5 @@ fi
 
 if [ "${GH_SONARQ_PARAMS}" != "" ]; then
     echo "Executing SonarQube"
-    sonar-scanner-3.0.3.778-linux/bin/sonar-scanner ${GH_SONARQ_PARAMS}
+    sonar-scanner-3.0.3.778-linux/bin/sonar-scanner -X ${GH_SONARQ_PARAMS}
 fi
