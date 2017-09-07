@@ -76,6 +76,9 @@ script:
     - if [ "$do_analyses" == "true" ]; then phpunit --coverage-clover=coverage.xml --log-junit=test_results.xml --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php; fi
     - if [ "$do_analyses" != "true" ]; then phpunit --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php; fi
     - if [ "$do_analyses" == "true" ]; then chmod +x travis.sh && ./travis.sh; fi
+
+after_script:
+    - if [ "$do_analyses" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.xml; fi
     
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - if [ "$do_analyses" == "true" ]; then bash <(curl -s https://codecov.io/bash); fi
