@@ -12,10 +12,10 @@ if [ ! -z "$TRAVIS_PULL_REQUEST" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] &&
 fi
 
 # Update SonarQube data on push builds on master branch
-#if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_SECURE_ENV_VARS}" == "true" ]; then
-#    echo "Building $TRAVIS_BRANCH branch. Will execute SonarQube scan"
-#    GH_SONARQ_PARAMS="-Dsonar.host.url=$SQ_URL -Dsonar.jdbc.url=$SQ_JDBC_URL -Dsonar.jdbc.driverClassName=org.postgresql.Driver -Dsonar.jdbc.user=$SQ_JDBC_USER -Dsonar.jdbc.password=$SQ_JDBC_PASSWORD"
-#fi
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ] && [ "${TRAVIS_BRANCH}" == "develop" ] && [ "${TRAVIS_SECURE_ENV_VARS}" == "true" ]; then
+    echo "Building $TRAVIS_BRANCH branch. Will execute SonarQube scan"
+    GH_SONARQ_PARAMS="-Dsonar.host.url=$SQ_URL -Dsonar.projectKey=fr.carglass.travis-test:test-php -Dsonar.projectName=Travis-Php-Test -Dsonar.projectVersion=0.1 -Dsonar.sources=src -Dsonar.language=php -Dsonar.php.coverage.reportPath=coverage.xml -Dsonar.php.tests.reportPath=test_results.xml"
+fi
 
 if [ "${GH_SONARQ_PARAMS}" != "" ]; then
     echo "Executing SonarQube"
