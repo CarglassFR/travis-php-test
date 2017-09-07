@@ -20,6 +20,10 @@ addons:
         - parallel
 
 matrix:
+    include:
+        - php: '7.1'
+	  env: do_analyses=true
+	- php: '7.2'
     fast_finish: true
     allow_failures:
     - php: nightly
@@ -71,7 +75,7 @@ before_script:
 
 script:
     - phpunit --coverage-clover=coverage.xml --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php
-    - chmod +x travis.sh && ./travis.sh
+    - if [ "$do_analyses" == "true" ]; then chmod +x travis.sh && ./travis.sh; fi
     
 after_success:
     - bash <(curl -s https://codecov.io/bash)
