@@ -20,6 +20,9 @@ addons:
         - parallel
 
 matrix:
+    include:
+        - php: '7.1'
+          env: do_analyses=true
     fast_finish: true
     allow_failures:
     - php: nightly
@@ -43,6 +46,8 @@ before_install:
             echo -e "travis_fold:end:$fold"
         }
         export -f tfold
+    - wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip && unzip sonar-scanner-cli-3.0.3.778-linux.zip
+    - sonar-scanner-3.0.3.778-linux/bin/sonar-scanner -v
 
 install:
     - |
@@ -68,7 +73,12 @@ before_script:
     - composer install --no-dev --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
 
 script:
-    - phpunit --coverage-clover=coverage.xml --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php
+    - if [ "$do_analyses" == "true" ]; then phpunit --coverage-clover=coverage.xml --log-junit=test_results.xml --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php; fi
+    - if [ "$do_analyses" != "true" ]; then phpunit --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php; fi
+    - if [ "$do_analyses" == "true" ]; then chmod +x travis.sh && ./travis.sh; fi
+
+after_script:
+    - if [ "$do_analyses" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.xml; fi
     
 after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - if [ "$do_analyses" == "true" ]; then bash <(curl -s https://codecov.io/bash); fi
