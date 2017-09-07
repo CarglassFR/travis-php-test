@@ -44,7 +44,7 @@ before_install:
         }
         export -f tfold
     - wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip && unzip sonar-scanner-cli-3.0.3.778-linux.zip
-    - ls -lah
+    - sonar-scanner-3.0.3.778-linux -v
 
 install:
     - |
@@ -71,7 +71,6 @@ before_script:
 
 script:
     - phpunit --coverage-clover=coverage.xml --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php
-    - chmod +x travis.sh && ./travis.sh
     
 after_success:
     - bash <(curl -s https://codecov.io/bash)
