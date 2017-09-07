@@ -50,7 +50,7 @@ install:
             set -e
 
             tfold a.1 \
-            "echo 'HELLO !'"
+            "echo 'HELLO ! '"
             tfold a.2 \
             "ls -d tests/Domain/* | parallel --gnu --keep-order 'echo "Running {} tests"; phpdbg -qrr phpunit -c phpunit.xml --colors=always {} || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));'"
             tfold a.3i \
@@ -59,7 +59,7 @@ install:
         export -f run_tests
 
 before_script:
-    - phpenv config-rm xdebug.ini || echo "Xdebug not available"
+    #- phpenv config-rm xdebug.ini || echo "Xdebug not available"
     # Add composer's global bin directory to the path
     # see: https://github.com/drush-ops/drush#install---composer
     - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
@@ -68,4 +68,7 @@ before_script:
     - composer install --no-dev --prefer-dist --ansi --no-interaction --no-suggest --no-progress --optimize-autoloader
 
 script:
-    - (run_tests)
+    - phpunit --coverage-clover=coverage.xml --bootstrap src/Domain/Math/Calculator.php tests/Domain/Math/CalculatorTest.php
+    
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
