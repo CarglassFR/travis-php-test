@@ -30,7 +30,7 @@ jobs:
 
       - save_cache:
           paths:
-	    - $HOME/.composer/cache
+            - $HOME/.composer/cache
             - ./vendor
           key: v1-dependencies-{{ checksum "composer.json" }}
 
