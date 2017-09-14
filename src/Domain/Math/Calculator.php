@@ -10,7 +10,7 @@ final class Calculator
     {
         // check dead code
         if (false) {
-            return 1;
+            return 2;
         }
 
         return $number1 + $number2;
